@@ -3,9 +3,12 @@ import { Wifi, WifiOff, RefreshCw } from 'lucide-react';
 import { syncData } from '../db/sync';
 
 export default function OfflineIndicator({ isSyncing }) {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
 
   useEffect(() => {
+    // Strictly enforce the check on component mount in case the browser cached the state
+    setIsOnline(navigator.onLine);
+
     const handleOnline = () => {
       setIsOnline(true);
       // Automatically trigger sync when coming online
